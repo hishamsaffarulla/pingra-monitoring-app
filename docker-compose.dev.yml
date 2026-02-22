@@ -1,0 +1,49 @@
+# Docker Compose override for development environment
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+version: '3.8'
+
+services:
+  # Development overrides for PostgreSQL
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: dev_password
+    ports:
+      - "5432:5432"
+
+  # Development overrides for InfluxDB
+  influxdb:
+    environment:
+      DOCKER_INFLUXDB_INIT_PASSWORD: dev_password
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: dev-influxdb-token
+    ports:
+      - "8086:8086"
+
+  # Development overrides for Redis
+  redis:
+    command: redis-server --appendonly yes --requirepass dev_password
+    ports:
+      - "6379:6379"
+
+  # Development overrides for Application
+  app:
+    build:
+      target: builder
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: debug
+      DATABASE_URL: postgresql://postgres:dev_password@postgres:5432/url_monitoring
+      INFLUXDB_TOKEN: dev-influxdb-token
+      REDIS_URL: redis://:dev_password@redis:6379
+      JWT_SECRET: dev-jwt-secret-not-for-production
+    volumes:
+      # Mount source code for hot reload (if using nodemon)
+      - ./src:/app/src
+      - ./public:/app/public
+      # Prevent overwriting node_modules
+      - /app/node_modules
+    command: npm run dev
+    ports:
+      - "3000:3000"
+      # Expose debug port
+      - "9229:9229"

@@ -1,0 +1,163 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database - Relational data storage
+  postgres:
+    image: postgres:16-alpine
+    container_name: url-monitor-postgres
+    environment:
+      POSTGRES_DB: url_monitoring
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-scripts/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - url-monitor-network
+    restart: unless-stopped
+
+  # InfluxDB - Time-series data storage
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: url-monitor-influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: admin_password
+      DOCKER_INFLUXDB_INIT_ORG: url-monitoring
+      DOCKER_INFLUXDB_INIT_BUCKET: check-results
+      DOCKER_INFLUXDB_INIT_RETENTION: 90d
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: influxdb-admin-token-change-in-production
+    ports:
+      - "8088:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - url-monitor-network
+    restart: unless-stopped
+
+  # Redis - Caching and session storage
+  redis:
+    image: redis:7-alpine
+    container_name: url-monitor-redis
+    command: redis-server --appendonly yes --requirepass redis_password
+    ports:
+      - "6381:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - url-monitor-network
+    restart: unless-stopped
+
+  # URL Monitoring Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: url-monitor-app
+    environment:
+      # Application Settings
+      NODE_ENV: production
+      PORT: 3000
+      LOG_LEVEL: info
+
+      # PostgreSQL Configuration
+      DATABASE_URL: postgresql://postgres:postgres_password@postgres:5432/url_monitoring?sslmode=disable
+
+      # InfluxDB Configuration
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_TOKEN: influxdb-admin-token-change-in-production
+      INFLUXDB_ORG: url-monitoring
+      INFLUXDB_BUCKET: check-results
+      INFLUXDB_RETENTION_DAYS: 90
+
+      # Redis Configuration
+      REDIS_URL: redis://:redis_password@redis:6379
+      REDIS_DB: 0
+      REDIS_KEY_PREFIX: url-monitor
+      REDIS_DEFAULT_TTL: 3600
+      REDIS_SESSION_TTL: 86400
+      REDIS_ALERT_STATE_TTL: 604800
+      REDIS_CACHE_TTL: 1800
+
+      # JWT Authentication
+      JWT_SECRET: change-this-secret-in-production
+      JWT_EXPIRES_IN: 1h
+      JWT_REFRESH_EXPIRES_IN: 7d
+
+      # Database Connection Settings
+      DB_MAX_CONNECTIONS: 20
+
+      # Monitoring Settings
+      DEFAULT_TIMEOUT: 30
+      MAX_CONCURRENT_CHECKS: 100
+      DATA_RETENTION_DAYS: 90
+      ALERT_TRIGGER_MODE: ${ALERT_TRIGGER_MODE:-all}
+
+      # Email Notification Settings (Optional - configure as needed)
+      SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-URL Monitor <noreply@example.com>}
+
+      # Webhook Settings (Optional - configure as needed)
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:-}
+      TEAMS_WEBHOOK_URL: ${TEAMS_WEBHOOK_URL:-}
+      WEBHOOK_TIMEOUT: 10000
+
+      # SSL Certificate Monitoring
+      SSL_WARNING_DAYS: 30
+      SSL_CRITICAL_DAYS: 7
+    ports:
+      - "3002:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - url-monitor-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+
+networks:
+  url-monitor-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  influxdb_data:
+    driver: local
+  influxdb_config:
+    driver: local
+  redis_data:
+    driver: local
