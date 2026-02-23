@@ -88,6 +88,7 @@ function createApp(): Application {
         fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:", "https:"],
+        upgradeInsecureRequests: null,
       },
     },
   }));
