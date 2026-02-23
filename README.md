@@ -1,112 +1,148 @@
 # URL Monitoring Application
 
-A lightweight URL monitoring application that provides uptime monitoring, response time tracking, and multi-channel alerting capabilities. The system is designed for high reliability with minimal features, deployable across AWS, local Docker, and on-premises environments without modification.
+A lightweight URL monitoring application for uptime checks, response-time tracking, and alerting.
 
 ## Features
 
-- **HTTP/HTTPS URL Monitoring**: Check endpoint availability with configurable intervals (1m/5m)
-- **Multi-Location Checks**: Monitor from US, EU, and ME regions
-- **SSL Certificate Monitoring**: Track certificate expiry with advance warnings
-- **Configurable Alerting**: Set failure thresholds and recovery notifications
-- **Multi-Channel Notifications**: Email, webhook (Slack/Teams), SMS, and voice alerts
-- **Real-time Dashboard**: View uptime status, response times, and historical data
-- **Tenant Isolation**: Secure multi-tenant architecture with JWT authentication
+- HTTP/HTTPS monitoring with configurable intervals
+- SSL expiry tracking
+- Multi-channel notifications (email, webhook, SMS/voice)
+- Dashboard + REST APIs
+- Multi-tenant isolation with JWT auth
 
-## Technology Stack
+## Tech Stack
 
-- **Backend**: TypeScript, Node.js, Express.js
-- **Databases**: PostgreSQL (relational data), InfluxDB (time-series), Redis (caching/sessions)
-- **Authentication**: JWT with secure session management
-- **Testing**: Jest (unit tests) + fast-check (property-based testing)
+- Node.js + TypeScript + Express
+- PostgreSQL (relational), InfluxDB (time-series), Redis (cache/session)
+- Jest + fast-check for testing
 
-## Quick Start
+## Host This Project (Recommended: On-Prem Docker)
+
+This repository already includes a production-ready on-prem stack:
+- `docker-compose.onprem.yml`
+- `deploy/onprem/scripts/*.sh`
+- `deploy/onprem/nginx/pingra.conf`
+
+### 1. Server prerequisites
+
+- Ubuntu/Debian Linux host
+- Docker Engine + Docker Compose plugin
+- DNS (optional, but recommended for HTTPS)
+- Ports open: `80` and `443`
+
+Install Docker on a fresh Ubuntu/Debian host:
+
+```bash
+chmod +x deploy/onprem/scripts/*.sh
+./deploy/onprem/scripts/00-install-docker-ubuntu.sh
+```
+
+### 2. Prepare environment
+
+From the project root on the server:
+
+```bash
+chmod +x deploy/onprem/scripts/*.sh
+./deploy/onprem/scripts/10-prepare-env.sh
+```
+
+This creates `.env` from `.env.onprem.example` and auto-generates core secrets if values are missing or still `CHANGE_ME_*`.
+
+Then edit `.env` and confirm:
+- `POSTGRES_PASSWORD`
+- `REDIS_PASSWORD`
+- `INFLUXDB_INIT_PASSWORD`
+- `INFLUXDB_TOKEN`
+- `JWT_SECRET`
+- SMTP/Twilio values (if you need notifications immediately)
+
+### 3. Start the stack
+
+```bash
+./deploy/onprem/scripts/20-start.sh
+./deploy/onprem/scripts/30-status.sh
+```
+
+Services started by `docker-compose.onprem.yml`:
+- `postgres`
+- `influxdb`
+- `redis`
+- `app` (Node.js API/UI on internal port `3000`)
+- `nginx` (public entrypoint on ports `80`/`443`)
+
+Open:
+- `http://<SERVER_IP>`
+
+Health endpoint:
+- `http://<SERVER_IP>/health`
+
+### 4. Enable HTTPS (optional but recommended)
+
+1. Put cert files in `deploy/onprem/certs/`:
+   - `fullchain.pem`
+   - `privkey.pem`
+2. Edit `deploy/onprem/nginx/pingra.conf` and uncomment the TLS server block.
+3. Update `server_name your-domain.example.com;` to your real domain.
+4. Restart services:
+
+```bash
+./deploy/onprem/scripts/50-update.sh
+```
+
+### 5. Operations
+
+Check status and recent app logs:
+
+```bash
+./deploy/onprem/scripts/30-status.sh
+```
+
+Backup Postgres:
+
+```bash
+./deploy/onprem/scripts/40-backup-postgres.sh
+```
+
+Update/redeploy after pulling latest code:
+
+```bash
+./deploy/onprem/scripts/50-update.sh
+```
+
+## Local Development (Without Docker)
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - PostgreSQL 14+
 - InfluxDB 2.0+
 - Redis 6+
 
-### Installation
+### Run
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+cp .env.example .env
+# edit .env
+npm run build
+npm start
+```
 
-3. Copy environment configuration:
-   ```bash
-   cp .env.example .env
-   ```
+Development mode:
 
-4. Configure your environment variables in `.env`
-
-5. Build the application:
-   ```bash
-   npm run build
-   ```
-
-6. Start the application:
-   ```bash
-   npm start
-   ```
-
-For development:
 ```bash
 npm run dev
 ```
 
-### Testing
+## Testing and Linting
 
-Run unit tests:
 ```bash
 npm test
-```
-
-Run tests with coverage:
-```bash
 npm run test:coverage
-```
-
-Run tests in watch mode:
-```bash
-npm run test:watch
-```
-
-### Linting
-
-Check code style:
-```bash
 npm run lint
-```
-
-Fix linting issues:
-```bash
 npm run lint:fix
 ```
 
-## Architecture
-
-The application follows a monolithic architecture with clear separation of concerns:
-
-- **Scheduler**: Manages check intervals and triggers probe execution
-- **Probe Runner**: Executes HTTP/HTTPS checks from multiple locations  
-- **Database Layer**: Handles data persistence across PostgreSQL, InfluxDB, and Redis
-- **Alert Engine**: Processes failures and manages notification delivery
-- **Web Interface**: Provides dashboard and REST API with JWT authentication
-
-## Deployment
-
-The application supports deployment across multiple environments:
-
-- **AWS**: ECS/Fargate with RDS PostgreSQL, InfluxDB Cloud, and ElastiCache Redis
-- **Docker**: Local development with docker-compose
-- **On-premises**: Kubernetes or standalone Docker with external databases
-
-Detailed deployment guides will be provided in the `/docs` directory.
-
 ## License
 
-MIT License - see LICENSE file for details.
+MIT
