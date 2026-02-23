@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Lists - Pingra</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+    <link rel="stylesheet" href="/css/styles.css?v=20260221-2">
+</head>
+<body>
+    <div id="app">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <img class="brand-mark" src="/assets/logo-mark.svg" alt="Pingra logo">
+                    <div>
+                        <div class="brand-name">Pingra</div>
+                        <div class="brand-tagline">Enterprise Observability</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/home.html" class="nav-link"><span>&#x1F3E0;</span> Home</a>
+                <a href="/monitors.html" class="nav-link"><span>&#x1F4CA;</span> Monitors</a>
+                <a href="/incidents.html" class="nav-link"><span>&#x1F6A8;</span> Incidents</a>
+                <a href="/reports.html" class="nav-link"><span>&#x1F4C8;</span> Reports</a>
+                <a href="/status.html" class="nav-link"><span>&#x2713;</span> Status Page</a>
+                <a href="/contact-lists.html" class="nav-link active"><span>&#x1F465;</span> Contact Lists</a>
+                <a href="/integrations.html" class="nav-link"><span>&#x1F517;</span> Integrations</a>
+                <a href="/users.html" class="nav-link"><span>&#x1F465;</span> Users</a>
+                <a href="/settings.html" class="nav-link"><span>&#x2699;&#xFE0F;</span> Settings</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger btn-block btn-sm">Logout</button>
+            </div>
+        </aside>
+
+        <div class="content-wrapper">
+            <header class="header">
+                <div class="container">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <span id="user-email">Loading...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="container">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Contact Lists</h1>
+                            <p class="page-subtitle">Group notification targets for alerts and incidents</p>
+                        </div>
+                        <div class="page-actions">
+                            <button id="add-list-btn" class="btn btn-primary" type="button" type="button">+ Add List</button>
+                        </div>
+                    </div>
+
+                    <section class="table-container">
+                        <table class="data-table" id="contact-list-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Members</th>
+                                    <th>Contacts (Email / Mobile)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="5" class="text-center">Loading contact lists...</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section class="contact-members" id="contact-members-section">
+                        <h2 class="section-title">Members</h2>
+                        <div class="member-actions">
+                            <button id="add-member-btn" class="btn btn-secondary btn-sm" type="button" type="button" disabled>Add Member</button>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table" id="member-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="5" class="text-center">Select a list to view members.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+
+        <div id="contact-list-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <h2 class="modal-title" id="contact-list-modal-title">Create Contact List</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="contact-list-form">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="list-name" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Name</label>
+                            <input type="text" id="first-member-label" placeholder="John Doe" />
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Email</label>
+                            <input type="email" id="first-member-email" placeholder="john@company.com" />
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Mobile</label>
+                            <input type="tel" id="first-member-phone" placeholder="+1 555 123 4567" />
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="list-description" rows="3"></textarea>
+                        </div>
+                        <small style="color: var(--gray);">Contact name + email/mobile are optional now, but recommended.</small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-list-btn">Cancel</button>
+                    <button type="submit" form="contact-list-form" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="member-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <h2 class="modal-title" id="member-modal-title">Add Member</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="member-form">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="member-label" placeholder="John Doe" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="member-email" placeholder="john@company.com" />
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number</label>
+                            <input type="tel" id="member-phone" placeholder="+1 555 123 4567" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-member-btn">Cancel</button>
+                    <button type="submit" form="member-form" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js?v=20260221-2"></script>
+    <script src="/js/contact-lists.js?v=20260220-6"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

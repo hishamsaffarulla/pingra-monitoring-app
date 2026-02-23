@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Pingra</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+    <link rel="stylesheet" href="/css/styles.css?v=20260221-2">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <img src="/assets/logo-mark.svg" alt="Pingra logo">
+                <div class="brand-name">Pingra</div>
+            </div>
+            <h1>Create Your Account</h1>
+            <p class="auth-subtitle">Launch always-on monitoring in minutes</p>
+            
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="name">Full Name (Optional)</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="John Doe"
+                    />
+                    <small>This helps us personalize your experience</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="you@example.com"
+                        required
+                    />
+                    <small>We'll never share your email with anyone</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Create a strong password"
+                        required
+                    />
+                    <small>Must be at least 8 characters long</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="tenantName">Organization Name</label>
+                    <input 
+                        type="text" 
+                        id="tenantName" 
+                        name="tenantName" 
+                        placeholder="Acme Corporation"
+                        required
+                    />
+                    <small>This will be your workspace name</small>
+                </div>
+
+                <div id="error-message" class="error-message"></div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    Create Account
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="/login.html">Sign in instead</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js?v=20260221-2"></script>
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Account...';
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const tenantName = document.getElementById('tenantName').value;
+            const errorMessage = document.getElementById('error-message');
+
+            try {
+                const response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password, tenantName }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Show success and redirect
+                    errorMessage.className = 'success-message';
+                    errorMessage.textContent = '\u2713 Account created successfully! Redirecting to login...';
+                    errorMessage.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 1500);
+                } else {
+                    errorMessage.className = 'error-message active';
+                    errorMessage.textContent = data.message || 'Signup failed. Please try again.';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            } catch (error) {
+                errorMessage.className = 'error-message active';
+                errorMessage.textContent = 'Network error. Please check your connection and try again.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

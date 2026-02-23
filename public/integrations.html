@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrations - Pingra</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+    <link rel="stylesheet" href="/css/styles.css?v=20260221-2">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <img class="brand-mark" src="/assets/logo-mark.svg" alt="Pingra logo">
+                    <div>
+                        <div class="brand-name">Pingra</div>
+                        <div class="brand-tagline">Enterprise Observability</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/home.html" class="nav-link">
+                    <span>&#x1F3E0;</span> Home
+                </a>
+                <a href="/monitors.html" class="nav-link">
+                    <span>&#x1F4CA;</span> Monitors
+                </a>
+                <a href="/incidents.html" class="nav-link">
+                    <span>&#x1F6A8;</span> Incidents
+                </a>
+                <a href="/reports.html" class="nav-link">
+                    <span>&#x1F4C8;</span> Reports
+                </a>
+                <a href="/status.html" class="nav-link">
+                    <span>&#x2713;</span> Status Page
+                </a>
+                <a href="/contact-lists.html" class="nav-link">
+                    <span>&#x1F465;</span> Contact Lists
+                </a>
+                <a href="/integrations.html" class="nav-link active">
+                    <span>&#x1F517;</span> Integrations
+                </a>
+                <a href="/users.html" class="nav-link">
+                    <span>&#x1F465;</span> Users
+                </a>
+                <a href="/settings.html" class="nav-link">
+                    <span>&#x2699;&#xFE0F;</span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger btn-block btn-sm">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="container">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <span id="user-email">Loading...</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Integrations</h1>
+                        <p class="page-subtitle">Connect your favorite tools and services</p>
+                    </div>
+                </div>
+
+                <section class="integration-hero">
+                    <div>
+                        <h2>Enterprise Automation Hub</h2>
+                        <p>Route incidents, alerts, and reports into the tools your teams already use.</p>
+                        <p id="recipient-routing-note" class="page-subtitle" style="margin-top: 8px;">
+                            Alert recipients are controlled by Contact Lists only.
+                        </p>
+                    </div>
+                    <div class="integration-hero-badge">Premium Integrations</div>
+                </section>
+
+                <section class="integration-toolbar">
+                    <div class="integration-search">
+                        <input type="text" id="integration-search" placeholder="Search integrations..." />
+                        <span class="integration-search-icon">&#x1F50D;</span>
+                    </div>
+                    <select id="integration-filter" class="integration-filter">
+                        <option value="all">All Categories</option>
+                        <option value="communication">Communication</option>
+                        <option value="incident">Incident Management</option>
+                        <option value="email">Email & SMS</option>
+                        <option value="webhook">Webhooks & API</option>
+                    </select>
+                    <button id="smtp-settings-btn" class="btn btn-secondary" type="button">SMTP Settings</button>
+                </section>
+
+                <!-- Active Integrations -->
+                <section class="active-integrations-section">
+                    <h2 class="section-title">Active Integrations</h2>
+                    <p id="recipient-summary" class="page-subtitle" style="margin-bottom: 12px;">
+                        Loading contact recipients...
+                    </p>
+                    <div class="integrations-grid" id="active-integrations">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">&#x1F517;</div>
+                            <div class="empty-state-title">No Active Integrations</div>
+                            <div class="empty-state-text">Connect your first integration below</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Available Integrations -->
+                <section class="available-integrations-section">
+                    <h2 class="section-title">Available Integrations</h2>
+                    
+                    <!-- Communication -->
+                    <div class="integration-category">
+                        <h3 class="category-title">&#x1F4AC; Communication</h3>
+                        <div class="integrations-grid">
+                            <div class="integration-card" data-category="communication" data-type="slack">
+                                <div class="integration-logo slack">Slack</div>
+                                <h4>Slack</h4>
+                                <p>Send alerts to Slack channels</p>
+                                <button class="btn btn-primary btn-sm" data-integration="slack" type="button">Connect</button>
+                            </div>
+                            <div class="integration-card" data-category="communication" data-type="teams">
+                                <div class="integration-logo teams">Teams</div>
+                                <h4>Microsoft Teams</h4>
+                                <p>Post alerts to Teams channels</p>
+                                <button class="btn btn-primary btn-sm" data-integration="teams" type="button">Connect</button>
+                            </div>
+                            <div class="integration-card" data-category="communication" data-type="discord">
+                                <div class="integration-logo discord">Discord</div>
+                                <h4>Discord</h4>
+                                <p>Send notifications to Discord</p>
+                                <button class="btn btn-primary btn-sm" data-integration="discord" type="button">Connect</button>
+                            </div>
+                            <div class="integration-card" data-category="communication" data-type="call">
+                                <div class="integration-logo call">Call</div>
+                                <h4>Calling</h4>
+                                <p>Trigger outbound calls for critical alerts</p>
+                                <button class="btn btn-primary btn-sm" data-integration="call" type="button">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Incident Management -->
+                    <div class="integration-category">
+                        <h3 class="category-title">&#x1F6A8; Incident Management</h3>
+                        <div class="integrations-grid">
+                            <div class="integration-card" data-category="incident" data-type="pagerduty">
+                                <div class="integration-logo pagerduty">PagerDuty</div>
+                                <h4>PagerDuty</h4>
+                                <p>Create incidents in PagerDuty</p>
+                                <button class="btn btn-primary btn-sm" data-integration="pagerduty" type="button">Connect</button>
+                            </div>
+                            <div class="integration-card" data-category="incident" data-type="opsgenie">
+                                <div class="integration-logo opsgenie">Opsgenie</div>
+                                <h4>Opsgenie</h4>
+                                <p>Trigger alerts in Opsgenie</p>
+                                <button class="btn btn-primary btn-sm" data-integration="opsgenie" type="button">Connect</button>
+                            </div>
+                            <div class="integration-card" data-category="incident" data-type="victorops">
+                                <div class="integration-logo victorops">VictorOps</div>
+                                <h4>VictorOps</h4>
+                                <p>Route alerts to VictorOps</p>
+                                <button class="btn btn-primary btn-sm" data-integration="victorops" type="button">Connect</button>
+                            </div>
+                            <div class="integration-card" data-category="incident" data-type="jira">
+                                <div class="integration-logo jira">Jira</div>
+                                <h4>Jira Service Management</h4>
+                                <p>Create issues and incidents in Jira</p>
+                                <button class="btn btn-primary btn-sm" data-integration="jira" type="button">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email & SMS -->
+                    <div class="integration-category">
+                        <h3 class="category-title">&#x1F4E7; Email & SMS</h3>
+                        <div class="integrations-grid">
+                            <div class="integration-card" data-category="email" data-type="email">
+                                <div class="integration-logo email">Email</div>
+                                <h4>Email</h4>
+                                <p>Send alerts via email</p>
+                                <button class="btn btn-primary btn-sm" data-integration="email" type="button">Configure</button>
+                            </div>
+                            <div class="integration-card" data-category="email" data-type="twilio">
+                                <div class="integration-logo twilio">Twilio</div>
+                                <h4>Twilio SMS</h4>
+                                <p>Send SMS alerts via Twilio</p>
+                                <button class="btn btn-primary btn-sm" data-integration="twilio" type="button">Connect</button>
+                            </div>
+                            <div class="integration-card" data-category="email" data-type="sendgrid">
+                                <div class="integration-logo sendgrid">SendGrid</div>
+                                <h4>SendGrid</h4>
+                                <p>Email alerts via SendGrid</p>
+                                <button class="btn btn-primary btn-sm" data-integration="sendgrid" type="button">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Webhooks -->
+                    <div class="integration-category">
+                        <h3 class="category-title">&#x1F517; Webhooks & API</h3>
+                        <div class="integrations-grid">
+                            <div class="integration-card" data-category="webhook" data-type="webhook">
+                                <div class="integration-logo webhook">Webhook</div>
+                                <h4>Custom Webhook</h4>
+                                <p>Send alerts to any webhook URL</p>
+                                <button class="btn btn-primary btn-sm" data-integration="webhook" type="button">Configure</button>
+                            </div>
+                            <div class="integration-card" data-category="webhook" data-type="zapier">
+                                <div class="integration-logo zapier">Zapier</div>
+                                <h4>Zapier</h4>
+                                <p>Connect to 3000+ apps</p>
+                                <button class="btn btn-primary btn-sm" data-integration="zapier" type="button">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Integration Configuration Modal -->
+        <div id="integration-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <h2 class="modal-title" id="integration-modal-title">Configure Integration</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="integration-form">
+                        <div id="integration-config-fields">
+                            <!-- Dynamic fields based on integration type -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-integration-btn">Cancel</button>
+                    <button type="submit" form="integration-form" class="btn btn-primary">Save Integration</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disconnect Confirmation Modal -->
+        <div id="disconnect-confirm-modal" class="modal">
+            <div class="modal-content modal-small">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <h2 class="modal-title">Disconnect Integration</h2>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-text">Are you sure you want to disconnect this integration?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-disconnect-btn">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirm-disconnect-btn">Disconnect</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="smtp-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">SMTP Settings</h2>
+                </div>
+                <div class="modal-body">
+                    <p class="page-subtitle" style="margin-bottom: 14px;">
+                        Configure tenant SMTP once. Email alerts will use this by default.
+                    </p>
+                    <form id="smtp-form" class="settings-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="smtp-host">SMTP Host</label>
+                                <input type="text" id="smtp-host" placeholder="smtp.example.com" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-port">Port</label>
+                                <input type="number" id="smtp-port" min="1" max="65535" placeholder="587" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-username">Username</label>
+                                <input type="text" id="smtp-username" placeholder="alerts@example.com" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-from">From Email</label>
+                                <input type="email" id="smtp-from" placeholder="alerts@example.com" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-password">Password</label>
+                                <input type="password" id="smtp-password" placeholder="Leave blank to keep existing password" />
+                            </div>
+                            <div class="form-group">
+                                <label for="smtp-test-recipient">Test Recipient</label>
+                                <input type="email" id="smtp-test-recipient" placeholder="you@example.com" />
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 6px;">
+                            <label style="display:flex; align-items:center; gap:8px;">
+                                <input type="checkbox" id="smtp-secure" />
+                                Use TLS/SSL (secure transport)
+                            </label>
+                        </div>
+                    </form>
+                    <p id="smtp-status" class="page-subtitle" style="margin-top: 10px;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="smtp-cancel-btn" class="btn btn-secondary" type="button">Cancel</button>
+                    <button id="smtp-test-btn" class="btn btn-secondary" type="button">Send Test Email</button>
+                    <button id="smtp-save-btn" class="btn btn-primary" type="submit" form="smtp-form">Save SMTP</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="integration-feedback-modal" class="modal">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="integration-feedback-title">Notice</h2>
+                </div>
+                <div class="modal-body">
+                    <p id="integration-feedback-message" class="modal-text"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="integration-feedback-ok-btn" type="button" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js?v=20260221-2"></script>
+    <script src="/js/integrations.js?v=20260221-7"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

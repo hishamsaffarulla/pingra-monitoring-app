@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Page - Pingra</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+    <link rel="stylesheet" href="/css/styles.css?v=20260221-2">
+    <link rel="stylesheet" href="/css/status-hetrix.css?v=20260221-3">
+</head>
+<body class="hetrix-body">
+    <div class="hetrix-shell">
+        <main class="hetrix-main">
+            <header class="hetrix-topbar">
+                <div class="hetrix-title-wrap">
+                    <h1 class="hetrix-title">Pingra Status - Website Monitoring</h1>
+                </div>
+                <div class="hetrix-user-actions">
+                    <button id="share-btn" class="hetrix-icon-link" type="button" title="Share">&#x1F517;</button>
+                    <button id="customize-btn" class="hetrix-icon-link" type="button" title="Customize">&#x2699;</button>
+                    <button id="logout-btn" class="btn btn-danger btn-sm" type="button">Logout</button>
+                </div>
+            </header>
+
+            <section class="status-panel">
+                <section class="status-kpi-grid">
+                    <article class="status-kpi-card">
+                        <div class="status-kpi-label">Operational</div>
+                        <div class="status-kpi-value" id="kpi-operational">0</div>
+                    </article>
+                    <article class="status-kpi-card">
+                        <div class="status-kpi-label">Partial Outage</div>
+                        <div class="status-kpi-value" id="kpi-degraded">0</div>
+                    </article>
+                    <article class="status-kpi-card">
+                        <div class="status-kpi-label">Major Outage</div>
+                        <div class="status-kpi-value" id="kpi-outage">0</div>
+                    </article>
+                    <article class="status-kpi-card">
+                        <div class="status-kpi-label">Tracked Services</div>
+                        <div class="status-kpi-value" id="kpi-total">0</div>
+                    </article>
+                </section>
+
+                <section class="status-controls">
+                    <button id="grid-view-btn" class="status-icon-btn" type="button" title="Grid View">&#x25A6;</button>
+                    <button id="filter-btn" class="status-icon-btn" type="button" title="Filter">&#x1F5C3;</button>
+                    <div class="status-search">
+                        <input id="status-search" type="text" placeholder="Search..." />
+                        <span class="status-search-icon">&#x1F50D;</span>
+                    </div>
+                    <div class="status-inline-uptime" id="overall-uptime-inline">&#x2303; -- Overall Uptime</div>
+                    <div class="status-range">
+                        <button id="older-btn" class="btn btn-secondary btn-sm" type="button">&lsaquo; Older</button>
+                        <button id="recent-btn" class="btn btn-secondary btn-sm" type="button">Recent</button>
+                        <button id="newer-btn" class="btn btn-secondary btn-sm" type="button">Newer &rsaquo;</button>
+                    </div>
+                    <button id="refresh-btn" class="btn btn-secondary btn-sm status-refresh-btn" type="button" title="Refresh now">Auto Refresh: 30s</button>
+                </section>
+
+                <div class="status-updated">Last updated: <span id="last-updated">Just now</span> | Auto refresh in <span id="refresh-countdown">30s</span></div>
+
+                <section class="status-table-section">
+                    <div class="status-table" id="status-table">
+                        <div class="loading">Loading status...</div>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div id="overall-uptime" hidden>Overall Uptime: --</div>
+
+    <div id="status-feedback-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2 class="modal-title" id="status-feedback-title">Notice</h2>
+            </div>
+            <div class="modal-body">
+                <p id="status-feedback-message" class="modal-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="status-feedback-ok-btn" type="button" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js?v=20260221-2"></script>
+    <script src="/js/status.js?v=20260221-5"></script>
+</body>
+</html>
+
+
+
+
+
+

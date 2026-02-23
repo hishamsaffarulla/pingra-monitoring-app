@@ -1,0 +1,13 @@
+<svg width="220" height="64" viewBox="0 0 220 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="220" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8C667"/>
+      <stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="10" width="44" height="44" rx="12" fill="#0B1F3B"/>
+  <path d="M18 46V18H30C34.5 18 38 21.5 38 26C38 30.5 34.5 34 30 34H18" stroke="url(#gold)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 40H22L26 32L30 35L38 28" stroke="#E8C667" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="38" cy="28" r="3" fill="#E8C667"/>
+  <text x="60" y="42" fill="#0B1F3B" font-family="Sora, 'Segoe UI', sans-serif" font-size="28" font-weight="600" letter-spacing="-0.6">Pingra</text>
+</svg>

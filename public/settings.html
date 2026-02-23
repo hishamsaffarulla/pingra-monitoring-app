@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Pingra</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+    <link rel="stylesheet" href="/css/styles.css?v=20260221-2">
+</head>
+<body>
+    <div id="app">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <img class="brand-mark" src="/assets/logo-mark.svg" alt="Pingra logo">
+                    <div>
+                        <div class="brand-name">Pingra</div>
+                        <div class="brand-tagline">Enterprise Observability</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/home.html" class="nav-link"><span>&#x1F3E0;</span> Home</a>
+                <a href="/monitors.html" class="nav-link"><span>&#x1F4CA;</span> Monitors</a>
+                <a href="/incidents.html" class="nav-link"><span>&#x1F6A8;</span> Incidents</a>
+                <a href="/reports.html" class="nav-link"><span>&#x1F4C8;</span> Reports</a>
+                <a href="/status.html" class="nav-link"><span>&#x2713;</span> Status Page</a>
+                <a href="/contact-lists.html" class="nav-link"><span>&#x1F465;</span> Contact Lists</a>
+                <a href="/integrations.html" class="nav-link"><span>&#x1F517;</span> Integrations</a>
+                <a href="/users.html" class="nav-link"><span>&#x1F465;</span> Users</a>
+                <a href="/settings.html" class="nav-link active"><span>&#x2699;&#xFE0F;</span> Settings</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger btn-block btn-sm">Logout</button>
+            </div>
+        </aside>
+
+        <div class="content-wrapper">
+            <header class="header">
+                <div class="container">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <span id="user-email">Loading...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="container">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Settings</h1>
+                            <p class="page-subtitle">Manage your account and preferences</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-layout">
+                        <aside class="settings-sidebar">
+                            <nav class="settings-nav">
+                                <a href="#general" class="settings-nav-item active" data-section="general">General</a>
+                                <a href="#account" class="settings-nav-item" data-section="account">Account</a>
+                                <a href="#notifications" class="settings-nav-item" data-section="notifications">Notifications</a>
+                                <a href="#security" class="settings-nav-item" data-section="security">Security</a>
+                                <a href="#api" class="settings-nav-item" data-section="api">API Keys</a>
+                                <a href="#advanced" class="settings-nav-item" data-section="advanced">Advanced</a>
+                            </nav>
+                        </aside>
+
+                        <div class="settings-content">
+                            <section id="general-section" class="settings-section active">
+                                <h2 class="settings-section-title">General Settings</h2>
+                                <form id="general-form" class="settings-form">
+                                    <div class="form-group">
+                                        <label for="org-name">Organization Name</label>
+                                        <input type="text" id="org-name" value="My Company" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="timezone">Timezone</label>
+                                        <select id="timezone">
+                                            <option value="UTC">UTC</option>
+                                            <option value="America/New_York">Eastern Time</option>
+                                            <option value="America/Chicago">Central Time</option>
+                                            <option value="America/Denver">Mountain Time</option>
+                                            <option value="America/Los_Angeles">Pacific Time</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="date-format">Date Format</label>
+                                        <select id="date-format">
+                                            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </section>
+
+                            <section id="account-section" class="settings-section">
+                                <h2 class="settings-section-title">Account Settings</h2>
+                                <form id="account-form" class="settings-form">
+                                    <div class="form-group">
+                                        <label for="full-name">Full Name</label>
+                                        <input type="text" id="full-name" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="tel" id="phone" placeholder="+1 (555) 123-4567" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Account</button>
+                                </form>
+                            </section>
+
+                            <section id="notifications-section" class="settings-section">
+                                <h2 class="settings-section-title">Notification Preferences</h2>
+                                <form id="notifications-form" class="settings-form">
+                                    <div class="form-group">
+                                        <label>Email Notifications</label>
+                                        <div class="checkbox-group">
+                                            <label><input type="checkbox" name="email-notif" value="downtime" checked /> Downtime alerts</label>
+                                            <label><input type="checkbox" name="email-notif" value="recovery" checked /> Recovery notifications</label>
+                                            <label><input type="checkbox" name="email-notif" value="ssl" checked /> SSL certificate expiry</label>
+                                            <label><input type="checkbox" name="email-notif" value="reports" /> Weekly reports</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>SMS Notifications</label>
+                                        <div class="checkbox-group">
+                                            <label><input type="checkbox" name="sms-notif" value="critical" /> Critical alerts only</label>
+                                            <label><input type="checkbox" name="sms-notif" value="all" /> All alerts</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Preferences</button>
+                                </form>
+                            </section>
+
+                            <section id="security-section" class="settings-section">
+                                <h2 class="settings-section-title">Security</h2>
+                                <form id="security-form" class="settings-form">
+                                    <div class="form-group">
+                                        <label for="current-password">Current Password</label>
+                                        <input type="password" id="current-password" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="new-password">New Password</label>
+                                        <input type="password" id="new-password" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirm-password">Confirm New Password</label>
+                                        <input type="password" id="confirm-password" />
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Change Password</button>
+                                </form>
+                                <div class="settings-divider"></div>
+                                <h3>Two-Factor Authentication</h3>
+                                <p class="settings-description">Add an extra layer of security to your account</p>
+                                <div class="info-row">
+                                    <span class="label">Status</span>
+                                    <span id="mfa-status-text" class="value">Disabled</span>
+                                </div>
+                                <div style="display:flex; gap:10px; margin-top:12px;">
+                                    <button id="mfa-setup-btn" class="btn btn-secondary" type="button">Setup 2FA</button>
+                                </div>
+                                <div id="mfa-disable-panel" style="display:none; margin-top:12px;">
+                                    <button id="mfa-disable-btn" class="btn btn-danger" type="button">Disable 2FA</button>
+                                </div>
+                                <div id="mfa-feedback" class="modal-text" style="margin-top:10px; display:none;"></div>
+                            </section>
+
+                            <section id="api-section" class="settings-section">
+                                <h2 class="settings-section-title">API Keys</h2>
+                                <p class="settings-description">Manage API keys for programmatic access</p>
+                                <button id="create-api-key-btn" class="btn btn-primary" type="button">Create API Key</button>
+                                <div id="new-api-key-panel" class="info-row" style="display:none; margin-top:12px; align-items:center; gap:10px;">
+                                    <span class="label">New Key</span>
+                                    <input id="new-api-key-value" type="text" readonly style="flex:1;" />
+                                    <button id="copy-api-key-btn" class="btn btn-secondary btn-sm" type="button">Copy</button>
+                                    <button id="hide-api-key-btn" class="btn btn-secondary btn-sm" type="button">Hide</button>
+                                </div>
+                                <div class="api-keys-list" id="api-keys-list">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">&#x1F511;</div>
+                                        <div class="empty-state-title">No API Keys</div>
+                                        <div class="empty-state-text">Create an API key to access the API</div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section id="advanced-section" class="settings-section">
+                                <h2 class="settings-section-title">Advanced Settings</h2>
+                                <div class="settings-form">
+                                    <div class="form-group">
+                                        <label for="data-retention">Data Retention</label>
+                                        <select id="data-retention">
+                                            <option value="30">30 days</option>
+                                            <option value="90" selected>90 days</option>
+                                            <option value="180">180 days</option>
+                                            <option value="365">1 year</option>
+                                        </select>
+                                        <small>How long to keep monitoring data</small>
+                                    </div>
+                                    <div class="settings-divider"></div>
+                                    <h3>Danger Zone</h3>
+                                    <p class="settings-description">Irreversible actions</p>
+                                    <button class="btn btn-danger" type="button">Delete Account</button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="api-key-name-modal" class="modal">
+        <div class="modal-content modal-small">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h2 class="modal-title">Create API Key</h2>
+            </div>
+            <div class="modal-body">
+                <form id="api-key-name-form">
+                    <div class="form-group">
+                        <label for="api-key-name-input">API Key Name</label>
+                        <input id="api-key-name-input" type="text" placeholder="Zapier Prod" maxlength="255" required />
+                        <small>Use a clear name so you can identify and delete keys later.</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-api-key-name-btn" type="button" class="btn btn-secondary">Cancel</button>
+                <button type="submit" form="api-key-name-form" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mfa-setup-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2 class="modal-title">Setup Two-Factor Authentication</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Scan QR Code</label>
+                    <div style="padding:10px; background:#fff; border-radius:10px; width:max-content;">
+                        <img id="mfa-qr-image" alt="MFA QR Code" style="display:block; width:220px; height:220px;" />
+                    </div>
+                    <small>Open your authenticator app and scan this QR code.</small>
+                </div>
+                <div class="form-group">
+                    <label for="mfa-secret">Authenticator Secret</label>
+                    <input type="text" id="mfa-secret" readonly />
+                    <small>Add this secret to Google Authenticator, Microsoft Authenticator, or Authy.</small>
+                </div>
+                <div class="form-group">
+                    <label for="mfa-verify-code">Enter 6-digit code</label>
+                    <input type="text" id="mfa-verify-code" placeholder="123456" maxlength="6" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="mfa-cancel-btn" type="button" class="btn btn-secondary">Cancel</button>
+                <button id="mfa-enable-btn" type="button" class="btn btn-primary">Verify & Enable</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mfa-disable-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2 class="modal-title">Disable Two-Factor Authentication</h2>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="mfa-disable-code">Enter 6-digit code</label>
+                    <input type="text" id="mfa-disable-code" placeholder="123456" maxlength="6" />
+                    <small>Use your authenticator app to generate the current code.</small>
+                </div>
+                <div id="mfa-disable-error" class="modal-text" style="display:none; color:#ffb4b4;"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="mfa-disable-cancel-btn" type="button" class="btn btn-secondary">Cancel</button>
+                <button id="mfa-disable-confirm-btn" type="button" class="btn btn-danger">Disable 2FA</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js?v=20260221-2"></script>
+    <script src="/js/settings.js?v=20260221-1"></script>
+</body>
+</html>
+
+

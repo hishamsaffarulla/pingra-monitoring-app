@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Pingra</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+    <link rel="stylesheet" href="/css/styles.css?v=20260221-2">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <img class="brand-mark" src="/assets/logo-mark.svg" alt="Pingra logo">
+                    <div>
+                        <div class="brand-name">Pingra</div>
+                        <div class="brand-tagline">Enterprise Observability</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/home.html" class="nav-link">
+                    <span>&#x1F3E0;</span> Home
+                </a>
+                <a href="/monitors.html" class="nav-link">
+                    <span>&#x1F4CA;</span> Monitors
+                </a>
+                <a href="/incidents.html" class="nav-link">
+                    <span>&#x1F6A8;</span> Incidents
+                </a>
+                <a href="/reports.html" class="nav-link">
+                    <span>&#x1F4C8;</span> Reports
+                </a>
+                <a href="/status.html" class="nav-link">
+                    <span>&#x2713;</span> Status Page
+                </a>
+                <a href="/contact-lists.html" class="nav-link">
+                    <span>&#x1F465;</span> Contact Lists
+                </a>
+                <a href="/integrations.html" class="nav-link">
+                    <span>&#x1F517;</span> Integrations
+                </a>
+                <a href="/users.html" class="nav-link active">
+                    <span>&#x1F465;</span> Users
+                </a>
+                <a href="/settings.html" class="nav-link">
+                    <span>&#x2699;&#xFE0F;</span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger btn-block btn-sm">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="container">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <span id="user-email">Loading...</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Team Members</h1>
+                        <p class="page-subtitle">Manage users and alert recipients</p>
+                    </div>
+                    <button id="add-user-btn" class="btn btn-primary" type="button">&#x2795; Add User</button>
+                </div>
+
+                <!-- Users Table -->
+                <section class="users-section">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Alert Preferences</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td colspan="6" class="loading">Loading users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Alert Groups -->
+                <section class="alert-groups-section">
+                    <h2 class="section-title">Alert Groups</h2>
+                    <p class="section-description">Create groups to send alerts to multiple users</p>
+                    <button id="add-group-btn" class="btn btn-secondary" type="button">&#x2795; Create Group</button>
+                    <div class="groups-grid" id="groups-grid">
+                        <div class="loading">Loading alert groups...</div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Add/Edit User Modal -->
+        <div id="user-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <h2 class="modal-title" id="user-modal-title">Add User</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="user-form">
+                        <div class="form-group">
+                            <label for="user-name">Full Name</label>
+                            <input type="text" id="user-name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="user-email-input">Email Address</label>
+                            <input type="email" id="user-email-input" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="user-role">Role</label>
+                            <select id="user-role" required>
+                                <option value="admin">Admin</option>
+                                <option value="member">Member</option>
+                                <option value="viewer">Viewer</option>
+                            </select>
+                            <small>Admin: Full access | Member: Can manage monitors | Viewer: Read-only</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Alert Preferences</label>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" name="alert-type" value="email" checked />
+                                    &#x1F4E7; Email Alerts
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="alert-type" value="sms" />
+                                    &#x1F4F1; SMS Alerts
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="alert-type" value="push" />
+                                    &#x1F514; Push Notifications
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-phone">Phone Number (Optional)</label>
+                            <input type="tel" id="user-phone" placeholder="+1 (555) 123-4567" />
+                            <small>Required for SMS alerts</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-user-btn">Cancel</button>
+                    <button type="submit" form="user-form" class="btn btn-primary">Save User</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Alert Group Modal -->
+        <div id="group-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <h2 class="modal-title">Create Alert Group</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="group-form">
+                        <div class="form-group">
+                            <label for="group-name">Group Name</label>
+                            <input type="text" id="group-name" placeholder="On-Call Team" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="group-description">Description</label>
+                            <textarea id="group-description" placeholder="Primary on-call rotation"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Members</label>
+                            <div class="checkbox-group" id="group-members">
+                                <div class="loading">Loading users...</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-group-btn">Cancel</button>
+                    <button type="submit" form="group-form" class="btn btn-primary">Create Group</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js?v=20260221-2"></script>
+    <script src="/js/users.js?v=20260221-1"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

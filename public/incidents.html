@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incidents - Pingra</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo-mark.svg">
+    <link rel="stylesheet" href="/css/styles.css?v=20260221-2">
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <img class="brand-mark" src="/assets/logo-mark.svg" alt="Pingra logo">
+                    <div>
+                        <div class="brand-name">Pingra</div>
+                        <div class="brand-tagline">Enterprise Observability</div>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="/home.html" class="nav-link">
+                    <span>&#x1F3E0;</span> Home
+                </a>
+                <a href="/monitors.html" class="nav-link">
+                    <span>&#x1F4CA;</span> Monitors
+                </a>
+                <a href="/incidents.html" class="nav-link active">
+                    <span>&#x1F6A8;</span> Incidents
+                </a>
+                <a href="/reports.html" class="nav-link">
+                    <span>&#x1F4C8;</span> Reports
+                </a>
+                <a href="/status.html" class="nav-link">
+                    <span>&#x2713;</span> Status Page
+                </a>
+                <a href="/contact-lists.html" class="nav-link">
+                    <span>&#x1F465;</span> Contact Lists
+                </a>
+                <a href="/integrations.html" class="nav-link">
+                    <span>&#x1F517;</span> Integrations
+                </a>
+                <a href="/users.html" class="nav-link">
+                    <span>&#x1F465;</span> Users
+                </a>
+                <a href="/settings.html" class="nav-link">
+                    <span>&#x2699;&#xFE0F;</span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-danger btn-block btn-sm">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="container">
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">U</div>
+                        <span id="user-email">Loading...</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Incident Management</h1>
+                        <p class="page-subtitle">Track and resolve service incidents</p>
+                    </div>
+                    <button id="create-incident-btn" class="btn btn-primary">&#x2795; Create Incident</button>
+                </div>
+
+                <!-- Incident Stats -->
+                <section class="incident-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon danger">&#x1F6A8;</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="active-incidents-count">0</div>
+                            <div class="stat-label">Active Incidents</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">&#x23F1;&#xFE0F;</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="avg-resolution-time">0m</div>
+                            <div class="stat-label">Avg Resolution Time</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">&#x2713;</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="resolved-this-month">0</div>
+                            <div class="stat-label">Resolved This Month</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Filters -->
+                <section class="incident-filters">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">All</button>
+                        <button class="filter-tab" data-filter="active">Active</button>
+                        <button class="filter-tab" data-filter="investigating">Investigating</button>
+                        <button class="filter-tab" data-filter="resolved">Resolved</button>
+                    </div>
+                    <div class="filter-controls">
+                        <select id="severity-filter" class="filter-select">
+                            <option value="">All Severities</option>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <input type="text" id="incident-search" placeholder="Search incidents..." class="filter-search" />
+                    </div>
+                </section>
+
+                <!-- Incidents List -->
+                <section class="incidents-list" id="incidents-list">
+                    <div class="loading">Loading incidents...</div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Incident Details Modal -->
+        <div id="incident-modal" class="modal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <div>
+                        <h2 class="modal-title" id="incident-title">Incident Details</h2>
+                        <div class="incident-meta">
+                            <span class="severity-badge" id="incident-severity">High</span>
+                            <span class="status-badge" id="incident-status">Active</span>
+                        </div>
+                    </div>
+                    <button type="button" class="modal-close-btn" data-close-modal="incident-modal" aria-label="Close incident details">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="incident-details">
+                        <div class="detail-section">
+                            <h3>Overview</h3>
+                            <div class="info-row">
+                                <span class="label">Incident ID</span>
+                                <span class="value" id="incident-id"></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Affected Service</span>
+                                <span class="value" id="incident-service"></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Started</span>
+                                <span class="value" id="incident-started"></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Duration</span>
+                                <span class="value" id="incident-duration"></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Assigned To</span>
+                                <span class="value" id="incident-assignee"></span>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Timeline</h3>
+                            <div class="incident-timeline" id="incident-timeline">
+                                <!-- Timeline entries -->
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Root Cause Details</h3>
+                            <div class="info-row">
+                                <span class="label">Root Cause</span>
+                                <span class="value" id="incident-root-cause">N/A</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Failed IP</span>
+                                <span class="value" id="incident-failed-ip">N/A</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Affected Regions</span>
+                                <span class="value" id="incident-affected-regions">N/A</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Status Code</span>
+                                <span class="value" id="incident-status-code">N/A</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Add Update</h3>
+                            <form id="incident-update-form">
+                                <div class="form-group">
+                                    <textarea id="update-message" placeholder="Describe the current status..." rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Update Status</label>
+                                    <select id="update-status">
+                                        <option value="investigating">Investigating</option>
+                                        <option value="identified">Identified</option>
+                                        <option value="monitoring">Monitoring</option>
+                                        <option value="resolved">Resolved</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="close-incident-btn" class="btn btn-danger">Close Incident</button>
+                    <button id="assign-incident-btn" class="btn btn-secondary">Assign</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Incident Modal -->
+        <div id="create-incident-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Create Incident</h2>
+                    <button type="button" class="modal-close-btn" data-close-modal="create-incident-modal" aria-label="Close create incident">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-incident-form">
+                        <div class="form-group">
+                            <label for="new-incident-title">Incident Title</label>
+                            <input type="text" id="new-incident-title" placeholder="Brief description of the issue" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="new-incident-description">Description</label>
+                            <textarea id="new-incident-description" rows="4" placeholder="Detailed description of the incident"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-incident-service">Affected Service</label>
+                            <select id="new-incident-service" required>
+                                <option value="">Select a monitor...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-incident-severity">Severity</label>
+                            <select id="new-incident-severity" required>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-incident-assignee">Assign To</label>
+                            <select id="new-incident-assignee">
+                                <option value="">Unassigned</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-create-incident">Cancel</button>
+                    <button type="submit" form="create-incident-form" class="btn btn-primary">Create Incident</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js?v=20260221-2"></script>
+    <script src="/js/incidents.js?v=20260220-2"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
